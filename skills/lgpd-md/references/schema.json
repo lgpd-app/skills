@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lgpd.md/schema.json",
+  "title": "lgpd.md",
+  "description": "Schema de validação para o frontmatter YAML do arquivo lgpd.md — Declaração de Conformidade LGPD (Lei 13.709/2018).",
+  "type": "object",
+  "required": [
+    "spec",
+    "atualizado",
+    "expira",
+    "status",
+    "controlador",
+    "encarregado",
+    "direitos",
+    "politica",
+    "bases_legais"
+  ],
+  "properties": {
+    "spec": {
+      "type": "string",
+      "description": "Versão da spec lgpd.md.",
+      "enum": ["1.0"]
+    },
+    "atualizado": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da última atualização do arquivo (ISO 8601: YYYY-MM-DD)."
+    },
+    "expira": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de expiração — o arquivo deve ser revisado antes desta data (ISO 8601: YYYY-MM-DD)."
+    },
+    "status": {
+      "type": "string",
+      "description": "Estado declarado de conformidade com a LGPD.",
+      "enum": ["conforme", "parcial", "em-adequação"]
+    },
+    "controlador": {
+      "type": "object",
+      "description": "Identificação do controlador de dados (Art. 41, §1º).",
+      "required": ["nome", "contato"],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Razão social ou nome do controlador."
+        },
+        "cnpj": {
+          "type": "string",
+          "description": "CNPJ do controlador (obrigatório para pessoa jurídica).",
+          "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$"
+        },
+        "contato": {
+          "type": "string",
+          "description": "Email ou URL de contato para questões de privacidade."
+        }
+      },
+      "additionalProperties": false
+    },
+    "encarregado": {
+      "type": "object",
+      "description": "Identificação do Encarregado/DPO (Art. 41).",
+      "required": ["nome", "contato"],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Nome do Encarregado de Proteção de Dados."
+        },
+        "contato": {
+          "type": "string",
+          "description": "Email ou URL de contato do Encarregado."
+        }
+      },
+      "additionalProperties": false
+    },
+    "direitos": {
+      "type": "object",
+      "description": "Canal para exercício dos direitos do titular (Art. 18).",
+      "required": ["canal", "prazo"],
+      "properties": {
+        "canal": {
+          "type": "string",
+          "description": "URL ou email para exercício de direitos do titular."
+        },
+        "prazo": {
+          "type": "integer",
+          "description": "Prazo máximo de resposta em dias (Art. 19, II — máximo 15 dias).",
+          "minimum": 1,
+          "maximum": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "politica": {
+      "type": "object",
+      "description": "Referência à política de privacidade completa (Art. 9º).",
+      "required": ["url"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL da política de privacidade completa."
+        },
+        "idioma": {
+          "type": "string",
+          "description": "Código de idioma da política (BCP 47).",
+          "default": "pt-br"
+        },
+        "atualizada": {
+          "type": "string",
+          "format": "date",
+          "description": "Data da última atualização da política de privacidade."
+        }
+      },
+      "additionalProperties": false
+    },
+    "cookies": {
+      "type": "object",
+      "description": "Declaração sobre consentimento de cookies (obrigatório se o site usa cookies não essenciais).",
+      "required": ["banner", "opt_in_previo", "rejeitar_todos"],
+      "properties": {
+        "banner": {
+          "type": "boolean",
+          "description": "Exibe banner de consentimento antes de cookies não essenciais."
+        },
+        "opt_in_previo": {
+          "type": "boolean",
+          "description": "Nenhum cookie não essencial é setado antes do aceite (Art. 8, §4º)."
+        },
+        "rejeitar_todos": {
+          "type": "boolean",
+          "description": "Botão 'Rejeitar Todos' com mesma proeminência visual que 'Aceitar' (Art. 8 — consentimento livre)."
+        },
+        "gerenciar_preferencias": {
+          "type": "boolean",
+          "description": "Modal de preferências granular por categoria de finalidade."
+        }
+      },
+      "additionalProperties": false
+    },
+    "bases_legais": {
+      "type": "array",
+      "description": "Mapeamento de finalidades, bases legais e dados tratados (Art. 7 + Art. 9º).",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["finalidade", "base", "dados"],
+        "properties": {
+          "finalidade": {
+            "type": "string",
+            "description": "Descrição da finalidade do tratamento."
+          },
+          "base": {
+            "type": "string",
+            "description": "Base legal utilizada.",
+            "enum": [
+              "consentimento",
+              "obrigação legal",
+              "administração pública",
+              "pesquisa",
+              "execução de contrato",
+              "exercício regular de direitos",
+              "proteção da vida",
+              "tutela da saúde",
+              "legítimo interesse",
+              "proteção do crédito"
+            ]
+          },
+          "artigo": {
+            "type": "string",
+            "description": "Referência ao artigo da LGPD (ex: 'Art. 7, I')."
+          },
+          "dados": {
+            "type": "array",
+            "description": "Categorias de dados pessoais tratados para esta finalidade.",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "transferencia_internacional": {
+      "type": "object",
+      "description": "Declaração sobre transferência internacional de dados (Art. 33). Obrigatório se transfere dados para fora do Brasil.",
+      "required": ["transfere"],
+      "properties": {
+        "transfere": {
+          "type": "boolean",
+          "description": "Indica se há transferência internacional de dados pessoais."
+        },
+        "destinos": {
+          "type": "array",
+          "description": "Países ou regiões de destino dos dados.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mecanismo": {
+          "type": "string",
+          "description": "Mecanismo legal que autoriza a transferência (Art. 33)."
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "properties": { "transfere": { "const": true } }
+      },
+      "then": {
+        "required": ["transfere", "destinos", "mecanismo"]
+      }
+    },
+    "scripts_terceiros": {
+      "type": "array",
+      "description": "Declaração de scripts de terceiros carregados no site.",
+      "items": {
+        "type": "object",
+        "required": ["nome", "finalidade", "consentimento_necessario"],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome do serviço/script de terceiro."
+          },
+          "finalidade": {
+            "type": "string",
+            "description": "Finalidade do script (ex: analytics, marketing, cdn/segurança)."
+          },
+          "consentimento_necessario": {
+            "type": "boolean",
+            "description": "Se o script requer consentimento prévio do titular."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
