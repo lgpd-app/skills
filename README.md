@@ -10,8 +10,14 @@ Coleção de skills de agente IA para conformidade com a Lei Geral de Proteção
 
 | Skill | Descrição | Instalação |
 |-------|-----------|------------|
-| **lgpd-check** | Audita websites para conformidade LGPD. Gera relatório com score e correções prioritárias. | `npx skills add lgpd-app/skills/lgpd-check` |
-| **lgpd-md** | Gera e valida arquivos `lgpd.md` a partir de documentos e política de privacidade. | `npx skills add lgpd-app/skills/lgpd-md` |
+| **lgpd-check** | Audita websites para conformidade LGPD. Gera relatório com score e correções prioritárias. | `npx skills add lgpd-app/skills --skill "LGPD Check"` |
+| **lgpd-md** | Gera e valida arquivos `lgpd.md` a partir de documentos e política de privacidade. | `npx skills add lgpd-app/skills --skill lgpd-md` |
+
+Instalar todas:
+
+```bash
+npx skills add lgpd-app/skills
+```
 
 Compatível com: Claude Code, Kiro CLI, Cursor, Codex, GitHub Copilot, Windsurf, Cline, e [outros agentes](https://skills.sh).
 
